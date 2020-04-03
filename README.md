@@ -33,7 +33,7 @@ daemon on boot) might be necessary.
 ## REFERENCES
 ### Postfix
 * [Official site](http://www.postfix.org/)
-* [Wikipedia](https://en.wikipedia.org/wiki/Sendmail)
+* [Wikipedia](https://en.wikipedia.org/wiki/Postfix_(software))
 ### Tiny Core Linux (TCL)
 * [Official site](http://www.tinycorelinux.net/)
 * [Custom extensions](http://wiki.tinycorelinux.net/wiki:extension_for_settings)
