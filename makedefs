@@ -515,7 +515,7 @@ case "$SYSTEM.$RELEASE" in
 		# Kernel 2.6 added EPOLL
 		case "$RELEASE" in
 		2.[0-5].*) CCARGS="$CCARGS -DNO_EPOLL";;
-		    # Workaround for retarded libc 
+		    # Workaround for retarded libc
 		    2.6.*)
 		       if [ `expr "X$CCARGS" : "X.*-DNO_EPOLL"` -gt 0 ]
 		       then
@@ -557,16 +557,14 @@ EOF
 		: ${SHLIB_ENV="LD_LIBRARY_PATH=`pwd`/lib"}
 		: ${PLUGIN_LD="${CC-gcc} -shared"}
 		;;
- Linux.[345].*)	SYSTYPE=LINUX$RELEASE_MAJOR
+ Linux.[345].*|Linux.TC) SYSTYPE=LINUX$RELEASE_MAJOR
 		case "$CCARGS" in
 		 *-DNO_DB*) ;;
 		 *-DHAS_DB*) ;;
-		 *) if [ -f /usr/include/db.h ]
-		    then
-			: we are all set
-		    elif [ -f /usr/include/db/db.h ]
-		    then
-			CCARGS="$CCARGS -I/usr/include/db"
+		 *) IDB=`find /usr/ -name db.h | head -n 1`
+            if [ $IDB ]
+            then
+			CCARGS="$CCARGS -I`dirname ${IDB}`"
 		    else
 			# On a properly installed system, Postfix builds
 			# by including <db.h> and by linking with -ldb
@@ -1041,7 +1039,7 @@ esac
 case "$shared" in
 yes)
     if [ -z "$SHLIB_SUFFIX" ]
-    then 
+    then
 	error "Shared libraries are requested, but not supported on this platform"
     fi
     AR=:
@@ -1144,7 +1142,7 @@ ${WARN='-Wall -Wno-comment -Wformat -Wimplicit -Wmissing-prototypes \
 # The following was validated in 2014 on FreeBSD/Linux and Solaris 9.
 
 DEFINED_MAP_TYPES=`
-    echo $CCARGS | tr -cd '\- _ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' | 
+    echo $CCARGS | tr -cd '\- _ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' |
 	tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz | ${AWK} '
 	{ for (n = 1; n <= NF; n++)
 	      if ($n ~ /^-dhas_/)
@@ -1159,7 +1157,7 @@ PLUGGABLE_MAPS="CDB LDAP LMDB MYSQL PCRE PGSQL SDBM SQLITE"
 case "$dynamicmaps" in
 yes) for name in $PLUGGABLE_MAPS
      do
-	 eval test -n "\"\$AUXLIBS_$name\"" && 
+	 eval test -n "\"\$AUXLIBS_$name\"" &&
 	     eval PLUGIN_AUXLIBS="\"\$PLUGIN_AUXLIBS
 AUXLIBS_$name = \$AUXLIBS_$name\""
      done;;
@@ -1174,7 +1172,7 @@ esac
 
 case "$shared" in
 yes) SHLIB_SYSLIBS=`${AWK} '
-     BEGIN { wc = split("'"$AUXLIBS $SYSLIBS"'", words) 
+     BEGIN { wc = split("'"$AUXLIBS $SYSLIBS"'", words)
 	 for (n = 1; n <= wc; n++)
 	     if (words[n] !~ /\.a$/)
 		 printf(" %s", words[n])
