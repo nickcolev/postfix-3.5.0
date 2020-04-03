@@ -28,7 +28,7 @@ Still, depending how you setup persistence, this might not
 work for you. Touches of your '`bootlocal.sh`' (to start the
 daemon on boot) might be necessary.
 
-<sup>TCL [persistence](http://wiki.tinycorelinux.net/wiki:start#persistence):</sup>
+<sup> see [TCL persistence](http://wiki.tinycorelinux.net/wiki:start#persistence)</sup>
 
 ## REFERENCES
 ### Postfix
